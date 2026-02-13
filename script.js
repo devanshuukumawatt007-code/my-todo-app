@@ -2,27 +2,43 @@ const input = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const list = document.getElementById("taskList");
 
+// Load saved tasks
+window.onload = function () {
+  list.innerHTML = localStorage.getItem("tasks") || "";
+};
+
+// Add task
 addBtn.addEventListener("click", addTask);
 
 function addTask() {
 
-  if (input.value.trim() === "") {
+  const text = input.value.trim();
+
+  if (text === "") {
     alert("Please enter a task");
     return;
   }
 
   const li = document.createElement("li");
-  li.textContent = input.value;
+  li.textContent = text;
 
-  const btn = document.createElement("button");
-  btn.textContent = "❌";
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "X";
 
-  btn.onclick = function () {
+  delBtn.onclick = function () {
     li.remove();
+    save();
   };
 
-  li.appendChild(btn);
+  li.appendChild(delBtn);
   list.appendChild(li);
 
   input.value = "";
+
+  save();
+}
+
+// Save to localStorage
+function save() {
+  localStorage.setItem("tasks", list.innerHTML);
 }
